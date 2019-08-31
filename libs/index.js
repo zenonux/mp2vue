@@ -88,8 +88,8 @@ function replaceHtml(fileContent, fileUrl, s, fileName) {
   str = str.replace(/text>/g, "span>");
   str = str.replace(/<navigator/g, "<router-link");
   str = str.replace(/navigator>/g, "router-link>");
-  str = str.replace(/<block/g, "<template");
-  str = str.replace(/block>/g, "template>");
+  str = str.replace(/<block/g, "<div");
+  str = str.replace(/block>/g, "div>");
 
   // 属性类
   str = str.replace(/bindtap/g, "@click");
@@ -115,7 +115,7 @@ function replaceHtml(fileContent, fileUrl, s, fileName) {
     return val;
   });
   str = str.replace(/wx:for="{{[^}}]*}}"/g, function(val) {
-    val = val.replace(/wx:for/g, "v-for");
+    val = val.replace(/wx:for="{{/g, 'v-for= "(item,index) in ');
     val = val.replace(/{{|}}/g, "");
     return val;
   });
