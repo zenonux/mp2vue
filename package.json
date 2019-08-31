@@ -3,11 +3,8 @@
   "version": "0.1.0",
   "description": "微信小程序转vue工具",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "bin": {
-    "mp2vue": "./bin/index.js"
+    "mp2vue": "./index.js"
   },
   "keywords": [
     "微信小程序转vue工具"
