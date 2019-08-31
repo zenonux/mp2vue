@@ -1,9 +1,9 @@
 var fs = require("fs");
 var path = require("path"); //解析需要遍历的文件夹
-var filePath = path.resolve("./pages");
-fileDisplay(filePath);
 
-function fileDisplay(filePath) {
+function fileDisplay(dir) {
+  dir = dir || "./pages";
+  var filePath = path.resolve(dir);
   //根据文件路径读取文件，返回文件列表
   fs.readdir(filePath, function(err, files) {
     if (err) {
@@ -118,3 +118,5 @@ function replaceHtml(fileContent, fileUrl, s, fileName) {
   //新建文件
   fs.writeFileSync(fileUrl + "/" + fileName.split(".")[0] + ".vue", str);
 }
+
+module.exports = fileDisplay;
