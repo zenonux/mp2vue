@@ -1,0 +1,20 @@
+{
+  "name": "mp2vue",
+  "version": "0.1.0",
+  "description": "微信小程序转vue工具",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "mp2vue": "./bin/index.js"
+  },
+  "keywords": [
+    "微信小程序转vue工具"
+  ],
+  "author": "换个头像心好累",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^3.0.1"
+  }
+}
