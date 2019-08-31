@@ -40,7 +40,7 @@ function getFile(flieName, ord, filename) {
     } else {
       //html部分转换
       if (flieName.indexOf("wxml") != -1) {
-        var dataName = "<template><div>" + data;
+        var dataName = data;
         replaceHtml(dataName, ord, flieName, filename);
       }
       //css部分抓获
@@ -59,9 +59,9 @@ function replaceLess(fileContent, fileUrl, s, fileName) {
   str = str.replace(/image/g, "img");
   str = str.replace(/navigator/g, "a");
   str = str.replace(/\d+rpx/g, function(a, b, c, d, e, f) {
-    return (parseInt(a) / 75).toFixed(2) + "rem";
+    return parseInt(a) / 2 + "px";
   });
-  var s = "<style scoped>" + str + "</style>";
+  var s = '<style lang="less" scoped>' + str + "</style>";
   fs.writeFileSync(fileUrl + "/" + fileName.split(".")[0] + ".styl", s);
 }
 
@@ -77,44 +77,63 @@ function replaceCss(fileContent, fileUrl, s, fileName) {
 }
 
 function replaceHtml(fileContent, fileUrl, s, fileName) {
-  var str = fileContent;
-  str = str.replace(/image/g, "img");
-  str = str.replace(/view/g, "div");
-  str = str.replace(/text/g, "span");
-  str = str.replace(/bindtap/g, "@onclick");
-  str = str.replace(/block/g, "template");
-  str = str.replace(/wx:if/g, "v-show");
-  str = str.replace(/src=\'\{\{/g, ":src='");
-  str = str.replace(/wx\:key=\"\*this\"/g, " ");
-  str = str.replace(/wx\:key\=\"index\"/g, " ");
-  str = str.replace(/navigator/g, "router-link");
-  str = str.replace(/wx:for="{{/g, 'v-for= "(item,index) in ');
+  var str = "<template>" + fileContent;
+  // 标签类
+  str = str.replace(/<image/g, "<img");
+  str = str.replace(/<scroll-view/g, "<div");
+  str = str.replace(/scroll-view>/g, "div>");
+  str = str.replace(/<view/g, "<div");
+  str = str.replace(/view>/g, "div>");
+  str = str.replace(/<text/g, "<span");
+  str = str.replace(/text>/g, "span>");
+  str = str.replace(/<navigator/g, "<router-link");
+  str = str.replace(/navigator>/g, "router-link>");
+  str = str.replace(/<block/g, "<template");
+  str = str.replace(/block>/g, "template>");
+
+  // 属性类
+  str = str.replace(/bindtap/g, "@click");
+  str = str.replace(/wx:if="{{[^}}]*}}"/g, function(val) {
+    val = val.replace(/wx:if/g, "v-if");
+    val = val.replace(/{{|}}/g, "");
+    return val;
+  });
+  str = str.replace(/wx:else/g, "v-else");
+  str = str.replace(/wx:elif="{{[^}}]*}}"/g, function(val) {
+    val = val.replace(/wx:elif/g, "v-else-if");
+    val = val.replace(/{{|}}/g, "");
+    return val;
+  });
+  str = str.replace(/hidden="{{[^}}]*}}"/g, function(val) {
+    val = val.replace(/hidden/g, ":hidden");
+    val = val.replace(/{{|}}/g, "");
+    return val;
+  });
+  str = str.replace(/src="{{[^}}]*}}"/g, function(val) {
+    val = val.replace(/src/g, ":src");
+    val = val.replace(/{{|}}/g, "");
+    return val;
+  });
+  str = str.replace(/wx:for="{{[^}}]*}}"/g, function(val) {
+    val = val.replace(/wx:for/g, "v-for");
+    val = val.replace(/{{|}}/g, "");
+    return val;
+  });
+  str = str.replace(/wx:key="{{[^}}]*}}"/g, function(val) {
+    val = val.replace(/wx:key/g, ":key");
+    val = val.replace(/{{|}}/g, "");
+    return val;
+  });
   str = str.replace(/url\=\'..\//g, "to='");
   str = str.replace(/bindinput/g, "@input");
 
-  //图片路径替换
-  str = str.replace(/..\/..\/imgs/g, function(a, b, c, d, e, f) {
-    return "../assets";
-  });
-  //rpx转rem
-  str = str.replace(/\d+rpx/g, function(a, b, c, d, e, f) {
-    return (parseInt(a) / 75).toFixed(2) + "rem";
+  //rpx转px
+  str = str.replace(/\d+rpx/g, function(a) {
+    return parseInt(a) / 2 + "px";
   });
 
-  str += "</div>";
   str += "</template>";
-  str +=
-    "<script>" +
-    'import vue from "vue"' +
-    "var vm = vue;" +
-    "export default {" +
-    'name:"' +
-    fileName +
-    '",' +
-    " data() {return {}}, " +
-    "methods: {} " +
-    "}" +
-    "</script>";
+
   //新建文件
   fs.writeFileSync(fileUrl + "/" + fileName.split(".")[0] + ".vue", str);
 }
