@@ -13,5 +13,9 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^3.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zenonux/mp2vue.git"
   }
 }
