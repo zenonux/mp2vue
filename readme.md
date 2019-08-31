@@ -1,6 +1,5 @@
 ## 安装
-```npm i -g mp2vue
-```
+```npm i -g mp2vue```
 
 ## 使用
 ```

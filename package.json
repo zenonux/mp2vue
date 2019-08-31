@@ -1,6 +1,6 @@
 {
   "name": "mp2vue",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "微信小程序转vue工具",
   "main": "index.js",
   "bin": {
