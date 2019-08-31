@@ -58,8 +58,8 @@ function replaceLess(fileContent, fileUrl, s, fileName) {
   var str = fileContent;
   str = str.replace(/image/g, "img");
   str = str.replace(/navigator/g, "a");
-  str = str.replace(/\d+rpx/g, function(a, b, c, d, e, f) {
-    return parseInt(a) / 2 + "px";
+  str = str.replace(/\d+rpx/g, function(a) {
+    return Math.ceil(parseInt(a) / 2) + "px";
   });
   var s = '<style lang="less" scoped>' + str + "</style>";
   fs.writeFileSync(fileUrl + "/" + fileName.split(".")[0] + ".styl", s);
@@ -69,8 +69,8 @@ function replaceCss(fileContent, fileUrl, s, fileName) {
   var str = fileContent;
   str = str.replace(/image/g, "img");
   str = str.replace(/navigator/g, "a");
-  str = str.replace(/\d+rpx/g, function(a, b, c, d, e, f) {
-    return (parseInt(a) / 75).toFixed(2) + "rem";
+  str = str.replace(/\d+rpx/g, function(a) {
+    return Math.ceil(parseInt(a) / 2) + "px";
   });
   var s = "<style scoped>" + str + "</style>";
   fs.writeFileSync(fileUrl + "/" + fileName.split(".")[0] + ".css", s);
@@ -92,7 +92,6 @@ function replaceHtml(fileContent, fileUrl, s, fileName) {
   str = str.replace(/block>/g, "div>");
 
   // 属性类
-  str = str.replace(/bindtap/g, "@click");
   str = str.replace(/wx:if="{{[^}}]*}}"/g, function(val) {
     val = val.replace(/wx:if/g, "v-if");
     val = val.replace(/{{|}}/g, "");
@@ -125,7 +124,10 @@ function replaceHtml(fileContent, fileUrl, s, fileName) {
     return val;
   });
   str = str.replace(/url\=\'..\//g, "to='");
+  str = str.replace(/bindtap/g, "@click");
+  str = str.replace(/catchtap/g, "@click.stop");
   str = str.replace(/bindinput/g, "@input");
+  str = str.replace(/hover-class="none"/g, "");
 
   //rpx转px
   str = str.replace(/\d+rpx/g, function(a) {
