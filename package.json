@@ -7,7 +7,7 @@
     "mp2vue": "./index.js"
   },
   "keywords": [
-    "微信小程序转vue工具"
+    "mp2vue"
   ],
   "author": "换个头像心好累",
   "license": "MIT",

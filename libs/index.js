@@ -123,15 +123,22 @@ function replaceHtml(fileContent, fileUrl, s, fileName) {
     val = val.replace(/{{|}}/g, "");
     return val;
   });
-  str = str.replace(/url\=\'..\//g, "to='");
   str = str.replace(/bindtap/g, "@click");
   str = str.replace(/catchtap/g, "@click.stop");
   str = str.replace(/bindinput/g, "@input");
   str = str.replace(/hover-class="none"/g, "");
+  str = str.replace(/class=".* {{[^{{]*}}"/g, function(val) {
+    var arr = val.split("{{");
+    var static = arr[0] + '"';
+    var dynamic = ' :class="' + arr[1];
+    dynamic = dynamic.substring(0, dynamic.length - 3) + '"';
+    return static + dynamic;
+  });
+  str = str.replace(/url=/g, "to=");
 
   //rpx转px
   str = str.replace(/\d+rpx/g, function(a) {
-    return parseInt(a) / 2 + "px";
+    return Math.ceil(parseInt(a) / 2) + "px";
   });
 
   str += "</template>";
